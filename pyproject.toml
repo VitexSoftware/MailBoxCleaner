@@ -7,7 +7,7 @@ name = "mailbox-cleaner"
 version = "0.1.0"
 description = "Move old IMAP messages to Thunderbird Local Folders"
 readme = "README.md"
-license = {text = "GPL-2.0-or-later"}
+license = "GPL-2.0-or-later"
 authors = [{name = "Vítězslav Dvořák", email = "info@vitexsoftware.cz"}]
 requires-python = ">=3.9"
 
