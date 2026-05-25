@@ -1,0 +1,221 @@
+.TH MAILBOX\-CLEANER 1 "2026-05-25" "0.1.0" "User Commands"
+.SH NAME
+mailbox\-cleaner \- move old IMAP messages to Thunderbird Local Folders
+.SH SYNOPSIS
+.B mailbox\-cleaner
+.RB [ \-\-host
+.IR HOST ]
+.RB [ \-\-port
+.IR PORT ]
+.RB [ \-\-user
+.IR USER ]
+.RB [ \-\-password
+.IR PASSWORD ]
+.RB [ \-\-folder
+.IR FOLDER ]
+.RB [ \-\-older\-than
+.IR DAYS ]
+.RB [ \-\-archive\-name
+.IR NAME ]
+.RB [ \-\-thunderbird\-profile
+.IR PATH ]
+.RB [ \-\-batch\-size
+.IR N ]
+.RB [ \-\-dry\-run ]
+.RB [ \-\-deploy
+.RB [ \-\-interval
+.IR CALENDAR ]]
+.SH DESCRIPTION
+.B mailbox\-cleaner
+connects to an IMAP server over SSL, searches a folder for messages older than
+a configurable number of days, and appends them to an mbox file inside
+Thunderbird's Local Folders directory.
+The originals are then deleted from the server and expunged, freeing quota.
+.PP
+Processing is done in batches to avoid connection timeouts on large mailboxes.
+Run the command repeatedly until no messages remain.
+After archiving, restart Thunderbird or right-click the target folder and choose
+.B Repair Folder
+to rebuild the index.
+.SH OPTIONS
+.TP
+.BI \-\-host " HOST"
+IMAP server hostname.
+Can also be set via the
+.B IMAP_HOST
+environment variable.
+.TP
+.BI \-\-port " PORT"
+IMAP SSL port.
+Default:
+.BR 993 .
+Environment variable:
+.BR IMAP_PORT .
+.TP
+.BI \-\-user " USER"
+IMAP account username.
+Environment variable:
+.BR IMAP_USER .
+.TP
+.BI \-\-password " PASSWORD"
+IMAP account password.
+Environment variable:
+.BR IMAP_PASSWORD .
+.TP
+.BI \-\-folder " FOLDER"
+IMAP folder to archive messages from.
+Default:
+.BR INBOX .
+Environment variable:
+.BR IMAP_FOLDER .
+.TP
+.BI \-\-older\-than " DAYS"
+Archive messages with a date older than
+.I DAYS
+days.
+Default:
+.BR 365 .
+Environment variable:
+.BR IMAP_OLDER_THAN .
+.TP
+.BI \-\-archive\-name " NAME"
+Name of the destination folder inside Thunderbird Local Folders.
+Created automatically if it does not exist.
+Default:
+.BR Archive .
+Environment variable:
+.BR ARCHIVE_NAME .
+.TP
+.BI \-\-thunderbird\-profile " PATH"
+Explicit path to the Thunderbird
+.I "Local Folders"
+directory
+(e.g.\&
+.IR ~/.thunderbird/abc123.default/Mail/Local\ Folders ).
+If omitted, the first profile found under
+.I ~/.thunderbird/
+is used.
+Environment variable:
+.BR THUNDERBIRD_PROFILE .
+.TP
+.BI \-\-batch\-size " N"
+Maximum number of messages to process in a single run.
+Default:
+.BR 200 .
+Environment variable:
+.BR BATCH_SIZE .
+.TP
+.B \-\-dry\-run
+Print the UIDs of messages that would be archived without downloading,
+writing, or deleting anything.
+.TP
+.B \-\-deploy
+Install a systemd user service and timer that run
+.B mailbox\-cleaner
+automatically on the schedule given by
+.BR \-\-interval .
+All current option values are saved to
+.I ~/.config/mailbox-cleaner.env
+(mode 600) and loaded by the service at run time.
+The timer is enabled and started immediately.
+.TP
+.BI \-\-interval " CALENDAR"
+Systemd
+.B OnCalendar
+expression used by
+.BR \-\-deploy .
+Default:
+.BR daily .
+Accepts any value accepted by systemd calendar syntax, for example
+.BR weekly ,
+.BR hourly ,
+or
+.BR "\(dqMon *\-*\-* 02:00:00\(dq" .
+.SH EXIT STATUS
+.TP
+.B 0
+Success.
+.TP
+.B 1
+A required argument is missing, the Thunderbird profile could not be
+located, or a fatal error occurred during execution.
+.SH ENVIRONMENT
+All long options have a corresponding environment variable listed in
+.SM OPTIONS
+above.
+Environment variables are used as defaults and are overridden by explicit
+command-line flags.
+.SH FILES
+.TP
+.I ~/.config/mailbox-cleaner.env
+Credential and configuration file written by
+.BR \-\-deploy .
+Mode 600; readable only by the owning user.
+.TP
+.I ~/.config/systemd/user/mailbox-cleaner.service
+Systemd user service unit written by
+.BR \-\-deploy .
+.TP
+.I ~/.config/systemd/user/mailbox-cleaner.timer
+Systemd user timer unit written by
+.BR \-\-deploy .
+.TP
+.I ~/.thunderbird/*/Mail/Local\ Folders/<archive\-name>
+Destination mbox file.
+The
+.I .msf
+index alongside it is regenerated automatically by Thunderbird.
+.SH EXAMPLES
+Preview which messages in INBOX are older than one year:
+.PP
+.RS
+.EX
+mailbox\-cleaner \-\-host imap.example.com \e
+                \-\-user me@example.com \e
+                \-\-password secret \e
+                \-\-older\-than 365 \e
+                \-\-dry\-run
+.EE
+.RE
+.PP
+Archive the first 50 matching messages:
+.PP
+.RS
+.EX
+mailbox\-cleaner \-\-host imap.example.com \e
+                \-\-user me@example.com \e
+                \-\-password secret \e
+                \-\-batch\-size 50
+.EE
+.RE
+.PP
+Install a weekly systemd timer that runs every Monday at 02:00:
+.PP
+.RS
+.EX
+mailbox\-cleaner \-\-host imap.example.com \e
+                \-\-user me@example.com \e
+                \-\-password secret \e
+                \-\-deploy \e
+                \-\-interval "Mon *\-*\-* 02:00:00"
+.EE
+.RE
+.PP
+Check timer status after deployment:
+.PP
+.RS
+.EX
+systemctl \-\-user list\-timers mailbox\-cleaner.timer
+.EE
+.RE
+.SH SEE ALSO
+.BR systemctl (1),
+.BR thunderbird (1),
+.BR mbox (5)
+.SH AUTHOR
+Vítězslav Dvořák <info@vitexsoftware.cz>
+.SH COPYRIGHT
+Copyright \(co 2026 Vítězslav Dvořák.
+License GPLv2+: GNU GPL version 2 or later
+.UR https://gnu.org/licenses/gpl.html
+.UE .

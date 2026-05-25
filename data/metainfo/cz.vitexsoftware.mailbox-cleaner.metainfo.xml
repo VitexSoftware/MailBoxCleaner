@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="console-application">
+  <id>cz.vitexsoftware.mailbox-cleaner</id>
+  <metadata_license>MIT</metadata_license>
+  <project_license>GPL-2.0-or-later</project_license>
+
+  <name>MailBoxCleaner</name>
+  <summary>Move old IMAP messages to Thunderbird Local Folders</summary>
+
+  <description>
+    <p>
+      MailBoxCleaner connects to any IMAP server over SSL and moves messages
+      older than a configurable threshold into Thunderbird's Local Folders in
+      standard mbox format. It frees server storage quota without losing mail.
+    </p>
+    <ul>
+      <li>Batch processing to avoid timeouts on large mailboxes</li>
+      <li>Dry-run mode to preview what would be archived</li>
+      <li>All options configurable via environment variables for scripting</li>
+      <li>Optional systemd user timer for fully automated, unattended archiving</li>
+    </ul>
+    <p>
+      Credentials are stored in a mode-600 environment file so the password
+      is never visible in the process list or system logs.
+    </p>
+  </description>
+
+  <icon type="stock">mailbox-cleaner</icon>
+
+  <provides>
+    <binary>mailbox-cleaner</binary>
+  </provides>
+
+  <categories>
+    <category>Utility</category>
+    <category>Network</category>
+    <category>Email</category>
+  </categories>
+
+  <url type="homepage">https://github.com/VitexSoftware/MailBoxCleaner</url>
+  <url type="bugtracker">https://github.com/VitexSoftware/MailBoxCleaner/issues</url>
+
+  <developer id="cz.vitexsoftware">
+    <name>Vítězslav Dvořák</name>
+  </developer>
+
+  <releases>
+    <release version="0.1.0" date="2026-05-25">
+      <description>
+        <p>Initial release.</p>
+      </description>
+    </release>
+  </releases>
+
+  <content_rating type="oars-1.1"/>
+</component>

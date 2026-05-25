@@ -1,0 +1,23 @@
+Source: mailbox-cleaner
+Section: python
+Priority: optional
+Maintainer: Vítězslav Dvořák <info@vitexsoftware.cz>
+Build-Depends:
+ debhelper-compat (= 13),
+ appstream,
+ dh-python,
+ pybuild-plugin-pyproject,
+ python3-all,
+ python3-setuptools,
+Standards-Version: 4.7.0
+Rules-Requires-Root: no
+
+Package: mailbox-cleaner
+Architecture: all
+Depends:
+ ${misc:Depends},
+ ${python3:Depends},
+Description: Move old IMAP messages to Thunderbird Local Folders
+ Command-line tool that connects to an IMAP server, finds messages older
+ than a configurable threshold, and archives them into Thunderbird's Local
+ Folders in mbox format. Frees server storage quota without losing mail.

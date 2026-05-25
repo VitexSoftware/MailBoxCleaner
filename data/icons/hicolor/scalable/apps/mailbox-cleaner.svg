@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <!-- Background tile -->
+  <rect width="64" height="64" rx="10" fill="#1565C0"/>
+
+  <!-- Envelope body -->
+  <rect x="8" y="16" width="48" height="30" rx="3" fill="none" stroke="white" stroke-width="2.5"/>
+  <!-- Envelope V-fold -->
+  <polyline points="8,16 32,33 56,16"
+            fill="none" stroke="white" stroke-width="2.5"
+            stroke-linejoin="round" stroke-linecap="round"/>
+  <!-- Envelope bottom-corner folds (depth cue) -->
+  <line x1="8"  y1="46" x2="22" y2="33"
+        stroke="white" stroke-width="1.5" stroke-linecap="round" opacity="0.45"/>
+  <line x1="56" y1="46" x2="42" y2="33"
+        stroke="white" stroke-width="1.5" stroke-linecap="round" opacity="0.45"/>
+
+  <!-- Archive-action badge (bottom-right) -->
+  <circle cx="47" cy="47" r="13" fill="#2E7D32"/>
+  <circle cx="47" cy="47" r="13" fill="none" stroke="#1B5E20" stroke-width="1"/>
+  <!-- Down-arrow shaft -->
+  <line x1="47" y1="38" x2="47" y2="50"
+        stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- Down-arrow head -->
+  <polyline points="41,46 47,53 53,46"
+            fill="none" stroke="white" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
