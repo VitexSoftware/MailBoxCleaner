@@ -1,4 +1,4 @@
-.TH MAILBOX\-CLEANER 1 "2026-05-25" "0.1.0" "User Commands"
+.TH MAILBOX\-CLEANER 1 "2026-05-25" "0.2.0" "User Commands"
 .SH NAME
 mailbox\-cleaner \- move old IMAP messages to Thunderbird Local Folders
 .SH SYNOPSIS
@@ -22,6 +22,7 @@ mailbox\-cleaner \- move old IMAP messages to Thunderbird Local Folders
 .RB [ \-\-batch\-size
 .IR N ]
 .RB [ \-\-dry\-run ]
+.RB [ \-\-verbose ]
 .RB [ \-\-deploy
 .RB [ \-\-interval
 .IR CALENDAR ]]
@@ -108,6 +109,18 @@ Environment variable:
 .B \-\-dry\-run
 Print the UIDs of messages that would be archived without downloading,
 writing, or deleting anything.
+.TP
+.B \-\-verbose
+Print the sender address and subject line of each message as it is
+fetched and archived.
+Environment variable:
+.BR VERBOSE
+(set to
+.BR 1 ,
+.BR true ,
+or
+.BR yes
+to enable).
 .TP
 .B \-\-deploy
 Install a systemd user service and timer that run

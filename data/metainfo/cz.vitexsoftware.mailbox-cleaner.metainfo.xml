@@ -45,6 +45,11 @@
   </developer>
 
   <releases>
+    <release version="0.2.0" date="2026-05-25">
+      <description>
+        <p>Add --verbose flag to print sender address and subject for each archived message.</p>
+      </description>
+    </release>
     <release version="0.1.0" date="2026-05-25">
       <description>
         <p>Initial release.</p>

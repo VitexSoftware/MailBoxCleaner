@@ -1,4 +1,5 @@
 import argparse
+import email
 import os
 import sys
 
@@ -38,6 +39,9 @@ def parse_args():
                         help='Max messages to process per run (default: 200) [env: BATCH_SIZE]')
     parser.add_argument('--dry-run', action='store_true',
                         help='Report what would be archived without making any changes')
+    parser.add_argument('--verbose', action='store_true',
+                        default=_env('VERBOSE', '').lower() in ('1', 'true', 'yes'),
+                        help='Print subject and sender for each archived message [env: VERBOSE]')
     parser.add_argument('--deploy', action='store_true',
                         help='Install a systemd user timer to run automatically on the chosen interval')
     parser.add_argument('--interval', default='daily',
@@ -107,6 +111,9 @@ def main():
             print(f'  WARNING: could not fetch UID {uid.decode()}, skipping')
             failed_uids.append(uid)
         else:
+            if args.verbose:
+                msg = email.message_from_bytes(raw)
+                print(f'  {msg.get("From", "(no sender)")}  |  {msg.get("Subject", "(no subject)")}')
             raw_messages.append((uid, raw))
 
     if raw_messages:
